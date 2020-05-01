@@ -57,7 +57,6 @@ func Save(SaveFileName="map"):
 	var U1 = Globals.U1
 	var U2 = Globals.U2
 	var Exists = true
-	print("[SAVE] Maps assigned")
 	
 	var dir = Directory.new()
 	if not dir.dir_exists("user://saves/"+SaveFileName):
