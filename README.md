@@ -1,4 +1,5 @@
-# SimpleTilesRefactor
+# SimpleTiles
 
-This is a project to rewrite and modularize SimpleTiles in preperation for more advanced/gameplay critical features. It has also gone open source (as you can see).
-The current code base is terrible and the plan at the moment is to modularize certain global/neccesary scripts into singletons that can be used anywhere, and to clean up existing code to be more readable and editable.
+More info will be here soon about SimpleTiles itself. Itch.io page: https://thesinkgod.itch.io/simpletiles
+
+This repository has been uploaded as I am now interested in making SimpleTiles open source. It's also a great time to do such a thing since I'm about to refactor a good portion of the game's code because it's currently a huge mess. Modularization and readability is one of the big objectives here.
