@@ -20,8 +20,6 @@ var lastCoordinate = Vector2()
 var footstepElements = []
 onready var FPSText = $Camera2D/UILayer/UIContainer/FPS
 
-signal relayer
-
 func _check_speed():
 	if weakref(targetMap).get_ref() != null:
 		var current_tile = targetMap.get_cellv(targetMap.world_to_map(global_position))
@@ -373,7 +371,7 @@ func _on_Exit_pressed():
 func _on_Settings_pressed():
 	if Globals.SettingsOpen == false:
 		Globals.SettingsOpen = true
-		$Camera2D/UILayer/UIContainer.add_child(load("res://SettingsMenu.tscn").instance())
+		$Camera2D/UILayer/UIContainer.add_child(load("res://UI/SettingsMenu.tscn").instance())
 
 
 func _on_FootstepTimer_timeout():

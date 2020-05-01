@@ -20,7 +20,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="SimpleTilesRefactor"
+config/name="SimpleTiles"
 config/description="a simple top-down 2D game where you walk around and do things"
 run/main_scene="res://MenuRoot.tscn"
 config/icon="res://icon.png"
@@ -34,9 +34,9 @@ footstep_volume=100
 
 [autoload]
 
-Globals="*res://Globals.gd"
-Utilities="*res://Utilities.gd"
-SaveLoad="*res://SaveLoad.gd"
+Globals="*res://Scripts/Globals.gd"
+Utilities="*res://Scripts/Utilities.gd"
+SaveLoad="*res://Scripts/SaveLoad.gd"
 
 [debug]
 

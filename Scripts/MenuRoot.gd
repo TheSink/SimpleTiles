@@ -169,13 +169,13 @@ func _on_PlayButton_pressed():
 func _on_Button5_pressed():
 	if Globals.CreditsOpen == false:
 		Globals.CreditsOpen = true
-		add_child(load("res://CreditsMenu.tscn").instance())
+		add_child(load("res://UI/CreditsMenu.tscn").instance())
 
 
 func _on_Settings_pressed():
 	if Globals.SettingsOpen == false:
 		Globals.SettingsOpen = true
-		add_child(load("res://SettingsMenu.tscn").instance())
+		add_child(load("res://UI/SettingsMenu.tscn").instance())
 		
 func _physics_process(_delta):
 	$Sprite.position += Vector2(-0.25,0.25)

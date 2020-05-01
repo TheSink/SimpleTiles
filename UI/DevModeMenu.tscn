@@ -81,7 +81,7 @@ func _on_Timer_timeout():
 	ticks.set_text(1,str(Globals.TicksElapsed))
 	movement.set_checked(1, Globals.MovementEnabled)
 	plrPos.set_text(1, str(Globals.PlayerBody.global_position))
-	plrTile.set_text(1,str(Globals.Map.world_to_map(Globals.PlayerBody.global_position)))
+	plrTile.set_text(1,str(Globals.S0.world_to_map(Globals.PlayerBody.global_position)))
 	lights.set_text(1, str(Globals.LightReferences.Cave.size()))
 	lights2.set_text(1,str(Globals.LightReferences.Surface.size()))
 	

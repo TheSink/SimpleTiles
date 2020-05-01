@@ -220,7 +220,7 @@ func Load(SaveFileName="map"):
 	var save_file = File.new()
 	if !save_file.file_exists("user://saves/"+SaveFileName+"/S0.dat"):
 		print("[LOAD] S0 file does not exist.")
-		var new_scene = get_tree().change_scene("res://MenuRoot.tscn")
+		var _new_scene = get_tree().change_scene("res://MenuRoot.tscn")
 		Globals.DisplayErrorPopup(get_node("/root"), "S0 file does not exist. Load failed.")
 		return
 	save_file.open("user://saves/"+SaveFileName+"/S0.dat", File.READ)

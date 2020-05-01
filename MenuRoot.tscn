@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Fonts/D-DIN-Bold.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://Sounds/UI/click_2.wav" type="AudioStream" id=2]
-[ext_resource path="res://MenuRoot.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/MenuRoot.gd" type="Script" id=3]
 [ext_resource path="res://Textures/UI/close-circle.png" type="Texture" id=4]
 [ext_resource path="res://Textures/UI/play.png" type="Texture" id=5]
 [ext_resource path="res://Textures/UI/arrow-left-bold.png" type="Texture" id=6]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Textures/UI/text-box.png" type="Texture" id=10]
 [ext_resource path="res://Textures/UI/grid.png" type="Texture" id=11]
 [ext_resource path="res://Textures/UI/st_logo.png" type="Texture" id=12]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 18
