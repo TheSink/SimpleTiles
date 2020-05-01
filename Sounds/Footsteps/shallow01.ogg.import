@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/shallow01.ogg-5521a414b35a0f74f3349cb1aff22c4c.oggstr"
+
+[deps]
+
+source_file="res://Sounds/Footsteps/shallow01.ogg"
+dest_files=[ "res://.import/shallow01.ogg-5521a414b35a0f74f3349cb1aff22c4c.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

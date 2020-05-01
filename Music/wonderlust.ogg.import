@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/wonderlust.ogg-c635ade1f449f9aacfab245dabb26d74.oggstr"
+
+[deps]
+
+source_file="res://Music/wonderlust.ogg"
+dest_files=[ "res://.import/wonderlust.ogg-c635ade1f449f9aacfab245dabb26d74.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

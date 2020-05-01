@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/osare.ogg-d547264f3a9a33ef6f9c03386b517064.oggstr"
+
+[deps]
+
+source_file="res://Music/osare.ogg"
+dest_files=[ "res://.import/osare.ogg-d547264f3a9a33ef6f9c03386b517064.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

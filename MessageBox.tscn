@@ -1,0 +1,68 @@
+[gd_scene format=2]
+
+[node name="WindowDialog" type="WindowDialog"]
+anchor_left = 0.3
+anchor_top = 0.35
+anchor_right = 0.7
+anchor_bottom = 0.65
+popup_exclusive = true
+window_title = "Error"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 18.0
+margin_bottom = -242.0
+text = "A non-fatal error has occured."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="State" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 36.0
+margin_bottom = -220.0
+text = "Occured during state: 0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 67.0
+margin_bottom = -189.0
+text = "Error:"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ErrorMessage" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 87.0
+margin_right = -20.0
+margin_bottom = -20.0
+text = "The error message itself failed to display. Wow."
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

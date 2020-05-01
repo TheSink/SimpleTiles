@@ -1,0 +1,131 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Fonts/D-DIN.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="DynamicFont" id=1]
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends WindowDialog
+
+onready var tree = $Tree
+var refresh
+var msec
+var gameStateInfo
+var time
+var movement
+var lights
+var lights2
+var plrPos
+var plrTile
+var ticks
+
+func get_game_state():
+	var gameState = str(Globals.CurrentGameState)
+	if gameState == \"0\":
+		gameState = \"MENU\"
+	elif gameState == \"1\":
+		gameState = \"GENERATE\"
+	elif gameState == \"2\":
+		gameState = \"LOAD\"
+	elif gameState == \"3\":
+		gameState = \"INGAME\"
+	elif gameState == \"4\":
+		gameState = \"PAUSED\"
+	return gameState
+	
+func _create_range(obj_tree, root, property_name, value, minimum, maximum, increment, enabled=true, expr=false):
+	var property = obj_tree.create_item(root)
+	property.set_cell_mode(1,TreeItem.CELL_MODE_RANGE)
+	property.set_text(0,property_name)
+	property.set_range_config(1, minimum, maximum, increment, expr)
+	property.set_range(1,value)
+	property.set_editable(1,enabled)
+	return property
+
+func _create_bool(obj_tree, root, property_name, checked, enabled=true):
+	var property = obj_tree.create_item(root)
+	property.set_cell_mode(1,TreeItem.CELL_MODE_CHECK)
+	property.set_text(0,property_name)
+	property.set_checked(1,checked)
+	property.set_editable(1,enabled)
+	return property
+
+func _ready():
+	var root = tree.create_item()
+	tree.set_hide_root(true)
+	refresh = _create_range(tree, root, \"Window Refresh Delay\", 2, 0.5, 10, 0.5, true)
+	msec = tree.create_item(root)
+	msec.set_text(0,\"Tick\")
+	gameStateInfo = tree.create_item(root)
+	gameStateInfo.set_text(0,\"Game State\")
+	time = tree.create_item(root)
+	time.set_text(0, \"Time\")
+	ticks = tree.create_item(root)
+	ticks.set_text(0, \"Ticks Elapsed\")
+	movement = _create_bool(tree, root, \"Movement Enabled\", false, false)
+	plrPos = tree.create_item(root)
+	plrPos.set_text(0, \"Player Global Coordinate\")
+	plrTile = tree.create_item(root)
+	plrTile.set_text(0, \"Player Tile Coordinate\")
+	lights = tree.create_item(root)
+	lights.set_text(0,\"Light Sources (U)\")
+	lights2 = tree.create_item(root)
+	lights2.set_text(0,\"Light Sources (S)\")
+
+func _on_Timer_timeout():
+	gameStateInfo.set_text(1,get_game_state())
+	msec.set_text(1,str(OS.get_ticks_msec()))
+	time.set_text(1,str(Globals.Time))
+	ticks.set_text(1,str(Globals.TicksElapsed))
+	movement.set_checked(1, Globals.MovementEnabled)
+	plrPos.set_text(1, str(Globals.PlayerBody.global_position))
+	plrTile.set_text(1,str(Globals.Map.world_to_map(Globals.PlayerBody.global_position)))
+	lights.set_text(1, str(Globals.LightReferences.Cave.size()))
+	lights2.set_text(1,str(Globals.LightReferences.Surface.size()))
+	
+	
+func _on_WindowDialog_visibility_changed():
+	if visible == true:
+		$Timer.start()
+	else:
+		$Timer.stop()
+
+
+func _on_Tree_item_edited():
+	$Timer.wait_time = refresh.get_range(1)
+"
+
+[sub_resource type="DynamicFont" id=3]
+use_filter = true
+font_data = ExtResource( 1 )
+
+[node name="WindowDialog" type="WindowDialog"]
+margin_left = 26.0
+margin_top = 37.0
+margin_right = 406.0
+margin_bottom = 397.0
+custom_fonts/title_font = SubResource( 1 )
+window_title = "Developer Mode"
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tree" type="Tree" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 3 )
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+[connection signal="about_to_show" from="." to="." method="_on_WindowDialog_about_to_show"]
+[connection signal="popup_hide" from="." to="." method="_on_WindowDialog_popup_hide"]
+[connection signal="visibility_changed" from="." to="." method="_on_WindowDialog_visibility_changed"]
+[connection signal="item_edited" from="Tree" to="." method="_on_Tree_item_edited"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

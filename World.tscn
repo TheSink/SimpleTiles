@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://TileSet.tres" type="TileSet" id=1]
+[ext_resource path="res://DayNightHandler.gd" type="Script" id=2]
+[ext_resource path="res://SelectionMap.tres" type="TileSet" id=3]
+[ext_resource path="res://Sounds/UI/click_2.wav" type="AudioStream" id=4]
+[ext_resource path="res://TickHandler.tscn" type="PackedScene" id=5]
+[ext_resource path="res://World.gd" type="Script" id=6]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=7]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 6 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+
+[node name="Surface" type="Node2D" parent="."]
+
+[node name="S0" type="TileMap" parent="Surface"]
+z_index = -1
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="S1" type="TileMap" parent="Surface"]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="S2" type="TileMap" parent="Surface"]
+modulate = Color( 1, 1, 1, 0.666667 )
+z_index = 5
+z_as_relative = false
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+collision_layer = 2
+collision_mask = 2
+format = 1
+
+[node name="Underground" type="Node2D" parent="."]
+
+[node name="U0" type="TileMap" parent="Underground"]
+z_index = -1
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="U1" type="TileMap" parent="Underground"]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="U2" type="TileMap" parent="Underground"]
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 32, 32 )
+collision_layer = 2
+collision_mask = 2
+format = 1
+
+[node name="SelectionMap" type="TileMap" parent="."]
+modulate = Color( 0, 1, 0.929412, 0.529412 )
+z_index = 6
+tile_set = ExtResource( 3 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="Player" parent="." instance=ExtResource( 7 )]
+z_index = 3
+z_as_relative = false
+
+[node name="Sprite" type="Sprite" parent="."]
+
+[node name="TickHandler" parent="." instance=ExtResource( 5 )]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+script = ExtResource( 2 )
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+__meta__ = {
+"_editor_description_": ""
+}
+[connection signal="timeout" from="Timer" to="Timer" method="_on_Timer_timeout"]

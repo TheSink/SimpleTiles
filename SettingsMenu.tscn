@@ -1,0 +1,198 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Textures/UI/arrow-left-bold.png" type="Texture" id=1]
+[ext_resource path="res://Fonts/D-DIN-Bold.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://Sounds/UI/click_2.wav" type="AudioStream" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+onready var tree = $Panel/Tree
+var fullscreen
+var borderless
+var shadow_resolution
+var atlas_resolution
+var font_oversample
+var masterVolume
+var musicVolume
+var footVolume
+var logging
+var maxLogs
+var vsync
+var dev_mode
+
+func _create_range(obj_tree, root, property_name, value, minimum, maximum, increment, enabled=true, expr=false):
+	var property = obj_tree.create_item(root)
+	property.set_cell_mode(1,TreeItem.CELL_MODE_RANGE)
+	property.set_text(0,property_name)
+	property.set_range_config(1, minimum, maximum, increment, expr)
+	property.set_range(1,value)
+	property.set_editable(1,enabled)
+	return property
+
+func _create_bool(obj_tree, root, property_name, checked, enabled=true):
+	var property = obj_tree.create_item(root)
+	property.set_cell_mode(1,TreeItem.CELL_MODE_CHECK)
+	property.set_text(0,property_name)
+	property.set_checked(1,checked)
+	property.set_editable(1,enabled)
+	return property
+
+func reloadConfigs():
+	var root = tree.create_item()
+	root.set_text(0,\"Settings\")
+	tree.set_hide_root(true)
+	var video = tree.create_item(root)
+	video.set_text(0,\"Video\")
+	var graphics = tree.create_item(root)
+	graphics.set_text(0,\"Graphics\")
+	var audio = tree.create_item(root)
+	audio.set_text(0,\"Audio\")
+	var misc = tree.create_item(root)
+	misc.set_text(0,\"Misc.\")
+	fullscreen = _create_bool(tree,video,\"Fullscreen\",ProjectSettings.get_setting(\"display/window/size/fullscreen\"))
+	borderless = _create_bool(tree,video,\"Borderless\",ProjectSettings.get_setting(\"display/window/size/borderless\"))
+	vsync = _create_bool(tree,video,\"Enable VSync\",ProjectSettings.get_setting(\"display/window/vsync/use_vsync\"))
+	shadow_resolution = _create_range(tree,graphics,\"Dynamic Shadow Resolution\",ProjectSettings.get_setting(\"rendering/quality/directional_shadow/size\"),512,8192,512)
+	atlas_resolution = _create_range(tree,graphics,\"Shadow Atlas Resolution\",ProjectSettings.get_setting(\"rendering/quality/shadow_atlas/size\"),512,8192,512)
+	font_oversample = _create_bool(tree,graphics,\"Font Oversampling\",ProjectSettings.get_setting(\"rendering/quality/dynamic_fonts/use_oversampling\"))
+	
+	masterVolume = _create_range(tree,audio,\"Master Volume\",ProjectSettings.get_setting(\"audio/master_volume\"), 0, 100, 1)
+	musicVolume = _create_range(tree,audio,\"Music Volume\",ProjectSettings.get_setting(\"audio/music_volume\"), 0, 100, 1)
+	footVolume = _create_range(tree,audio,\"Footstep Volume\",ProjectSettings.get_setting(\"audio/footstep_volume\"), 0, 100, 1)
+	
+	logging = _create_bool(tree,misc,\"Enable Logging\",ProjectSettings.get_setting(\"logging/file_logging/enable_file_logging\"))
+	maxLogs = _create_range(tree,misc,\"Max Logs\",ProjectSettings.get_setting(\"logging/file_logging/max_log_files\"),1,100,1)
+	dev_mode = _create_bool(tree,misc,\"Developer Mode\",ProjectSettings.get_setting(\"debug/settings/development/developer_mode\"))
+# (1-(AudioServer.get_bus_volume_db(0)/-80))*100 for get
+# -80-((masterVolume.get_range(1)/100)*-80) for set
+func _ready():
+	reloadConfigs()
+
+func _on_Button_pressed():
+	$Click.play()
+	var save_operation = ProjectSettings.save()
+	if save_operation == 0:
+		print(\"Game settings updated!\")
+	else:
+		print(\"***Game settings could not be saved. Error code: \"+str(save_operation))
+	OS.window_fullscreen = fullscreen.is_checked(1)
+	OS.window_borderless = borderless.is_checked(1)
+	OS.vsync_enabled = vsync.is_checked(1)
+	Globals.SettingsOpen = false
+	queue_free()
+
+
+func _on_Tree_item_edited():
+	ProjectSettings.set_setting(\"display/window/size/fullscreen\", fullscreen.is_checked(1))
+	ProjectSettings.set_setting(\"display/window/size/borderless\", borderless.is_checked(1))
+	ProjectSettings.set_setting(\"display/window/vsync/use_vsync\", vsync.is_checked(1))
+	ProjectSettings.set_setting(\"rendering/quality/directional_shadow/size\", shadow_resolution.get_range(1))
+	ProjectSettings.set_setting(\"rendering/quality/shadow_atlas/size\", atlas_resolution.get_range(1))
+	ProjectSettings.set_setting(\"rendering/quality/dynamic_fonts/use_oversampling\", font_oversample.is_checked(1))
+	ProjectSettings.set_setting(\"logging/file_logging/enable_file_logging\", logging.is_checked(1))
+	ProjectSettings.set_setting(\"logging/file_logging/max_log_files\", maxLogs.get_range(1))
+	ProjectSettings.set_setting(\"debug/settings/development/developer_mode\", dev_mode.is_checked(1))
+	ProjectSettings.set_setting(\"audio/master_volume\", masterVolume.get_range(1))
+	ProjectSettings.set_setting(\"audio/music_volume\", musicVolume.get_range(1))
+	ProjectSettings.set_setting(\"audio/footstep_volume\", footVolume.get_range(1))
+	AudioServer.set_bus_volume_db(0, -80-((ProjectSettings.get_setting(\"audio/master_volume\")/100)*-80))
+	AudioServer.set_bus_volume_db(1, -80-((ProjectSettings.get_setting(\"audio/music_volume\")/100)*-80))
+	AudioServer.set_bus_volume_db(2, -80-((ProjectSettings.get_setting(\"audio/footstep_volume\")/100)*-80))
+	
+"
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.0862745, 0.0823529, 0.0980392, 0.462745 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.133333, 0.121569, 0.156863, 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 32
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 14
+use_filter = true
+font_data = ExtResource( 2 )
+
+[node name="SettingsRoot" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel2" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 450.0
+margin_top = 150.0
+margin_right = -450.0
+margin_bottom = -150.0
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Tree" type="Tree" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+custom_fonts/font = SubResource( 4 )
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 449.539
+margin_top = 91.7615
+margin_right = 640.539
+margin_bottom = 145.761
+custom_fonts/font = SubResource( 5 )
+text = "Back"
+icon = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 648.0
+margin_top = 129.0
+margin_right = 1149.0
+margin_bottom = 144.0
+custom_fonts/font = SubResource( 6 )
+text = "Settings will not be saved until this menu is closed."
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+__meta__ = {
+"_editor_description_": ""
+}
+[connection signal="item_edited" from="Panel/Tree" to="." method="_on_Tree_item_edited"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
