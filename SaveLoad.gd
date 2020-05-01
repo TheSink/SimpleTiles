@@ -1,7 +1,5 @@
 extends Node
 
-# sync test 2 (hopefully it works this time)
-
 var mapData = {
 	"surface": [],
 	"above": [],
