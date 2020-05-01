@@ -1,5 +1,7 @@
 extends Node
 
+# this script is terrible
+
 var mapData = {
 	"surface": [],
 	"above": [],
