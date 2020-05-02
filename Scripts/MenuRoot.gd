@@ -164,7 +164,7 @@ func _on_PlayButton_pressed():
 	print("Loading world:" + selectedLevel)
 	var _new_scene = get_tree().change_scene("res://World.tscn")
 	Globals.CurrentGameState = Globals.GameState.LOAD
-	SaveLoad.Load(selectedLevel)
+	SaveLoad.LoadGame(selectedLevel)
 
 func _on_Button5_pressed():
 	if Globals.CreditsOpen == false:

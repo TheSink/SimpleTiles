@@ -5,6 +5,16 @@ enum DATA_MODE{MAP_CELLS,MAP_CHUNKS,VARIABLE}
 func _ready():
 	pass
 
+func CreateSaveFolder(folder_name):
+	var dir = Directory.new()
+	if not dir.dir_exists("user://saves/"+folder_name):
+		print("[SAVE] Directory not found for map, creating.")
+		dir.open("user://saves/")
+		dir.make_dir(folder_name)
+	else:
+		print("[SAVE] Directory already exists. Ignoring.")
+	dir.list_dir_end()
+
 func CalculateBounds(map):
 	var min_x = 0
 	var max_x = 0
@@ -47,7 +57,7 @@ func RegisterLightObject(map, location):
 	elif map == Definitions.MapLayer.UNDERGROUND:
 		Globals.LightPlacements.Underground.append(location)
 	
-func SaveData(save_name,file_name,mode,input_data,layer):
+func SaveData(save_name,file_name,mode,input_data,layer=null):
 	Globals.UIMsg = "Saving: " + file_name
 	print("[SAVE] Saving "+file_name+".")
 	var save_file = File.new()
@@ -80,7 +90,7 @@ func SaveData(save_name,file_name,mode,input_data,layer):
 		
 	save_file.close()
 
-func LoadData(save_name,file_name,mode,output):
+func LoadData(save_name,file_name,mode,output=null):
 	Globals.UIMsg = "Loading: " + file_name
 	var progress_increment = 0
 	var increment = 0
@@ -112,3 +122,36 @@ func LoadData(save_name,file_name,mode,output):
 		var data = save_file.get_var(true)
 		return data
 	save_file.close()
+
+func SaveGame(save_name):
+	CreateSaveFolder(save_name)
+	# Save all surface maps to file
+	SaveData(save_name,"S0",DATA_MODE.MAP_CELLS,Globals.S0,Definitions.MapLayer.SURFACE)
+	SaveData(save_name,"S1",DATA_MODE.MAP_CELLS,Globals.S1,Definitions.MapLayer.SURFACE)
+	SaveData(save_name,"S2",DATA_MODE.MAP_CELLS,Globals.S2,Definitions.MapLayer.SURFACE)
+	# Save all underground maps to file
+	SaveData(save_name,"U0",DATA_MODE.MAP_CELLS,Globals.U0,Definitions.MapLayer.UNDERGROUND)
+	SaveData(save_name,"U1",DATA_MODE.MAP_CELLS,Globals.U1,Definitions.MapLayer.UNDERGROUND)
+	SaveData(save_name,"U2",DATA_MODE.MAP_CELLS,Globals.U2,Definitions.MapLayer.UNDERGROUND)
+	# Save metadata/player information
+	SaveData(save_name,"PlayerData",DATA_MODE.VARIABLE,Globals.Player)
+	SaveData(save_name,"Metadata",DATA_MODE.VARIABLE,[Globals.SaveMetadata,Globals.MapData])
+	
+	Globals.UIMsg = ""
+	Globals.UIPercentage = -1 # Replace Globals.UI* stuff when the UIActions module is created
+
+func LoadGame(save_name):
+	# Load all surface maps
+	LoadData(save_name, "S0", DATA_MODE.MAP_CELLS, Globals.S0)
+	LoadData(save_name, "S1", DATA_MODE.MAP_CELLS, Globals.S1)
+	LoadData(save_name, "S2", DATA_MODE.MAP_CELLS, Globals.S2)
+	# Load all underground maps
+	LoadData(save_name, "U0", DATA_MODE.MAP_CELLS, Globals.U0)
+	LoadData(save_name, "U1", DATA_MODE.MAP_CELLS, Globals.U1)
+	LoadData(save_name, "U2", DATA_MODE.MAP_CELLS, Globals.U2)
+	# Load metadata/player information
+	var player_data = LoadData(save_name, "PlayerData", DATA_MODE.VARIABLE)
+	var metadata = LoadData(save_name, "Metadata", DATA_MODE.VARIABLE)
+	Globals.SaveMetadata = metadata[0]
+	Globals.MapData = metadata[1]
+	Globals.Player = player_data

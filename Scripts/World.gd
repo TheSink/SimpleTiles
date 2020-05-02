@@ -276,7 +276,7 @@ func _ready():
 		light.mode = Light2D.MODE_ADD
 		if not Globals.CurrentLayer == 1: light.enabled = false
 		Globals.LightReferences.Surface.append(light)
-	for cave_light in Globals.LightPlacements.Cave:
+	for cave_light in Globals.LightPlacements.Underground:
 		var light = Light2D.new()
 		add_child(light)
 		light.texture = load("res://torchlight.png")

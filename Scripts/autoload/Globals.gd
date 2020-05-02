@@ -111,7 +111,7 @@ var LightPlacements = {
 func _lower_errors():
 	NumberErrors -= 1
 
-func DisplayErrorPopup(root, errorMsg):
+func DisplayErrorPopup(root, errorMsg): # Rewrite and move to UIActions module
 	if NumberErrors < 1:
 		NumberErrors += 1
 		var gameState = str(CurrentGameState)

@@ -353,7 +353,7 @@ func _on_Save_pressed():
 	yield(get_tree().create_timer(0.001), "timeout")
 	Globals.Player.Position = global_position
 	Globals.Player.Map = Globals.CurrentLayer
-	SaveLoad.Save(Globals.SaveMetadata.Name)
+	SaveLoad.SaveGame(Globals.SaveMetadata.Name)
 	Globals.MovementEnabled = not Globals.MovementEnabled
 	$Camera2D/UILayer/UIContainer/MenuBox.visible = not $Camera2D/UILayer/UIContainer/MenuBox.visible
 
