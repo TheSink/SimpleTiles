@@ -20,7 +20,8 @@
 [ext_resource path="res://Textures/UI/Spinner/frame-4.png" type="Texture" id=18]
 [ext_resource path="res://Textures/UI/Spinner/frame-26.png" type="Texture" id=19]
 [ext_resource path="res://Textures/UI/Spinner/frame-2.png" type="Texture" id=20]
-[ext_resource path="res://playerIcon.png" type="Texture" id=21]
+[ext_resource path="res://Textures/playerIcon.png" type="Texture" id=21]
+
 
 [sub_resource type="Environment" id=1]
 background_energy = 0.0

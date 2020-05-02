@@ -27,16 +27,16 @@ var CurrentGameState = GameState.MENU
 var PlayerBody
 
 var BlockTextures = {
-	"Deep_Water": ["res://Tiles/water_deep.png",1],
-	"Shallow_Water": ["res://Tiles/water_shallow.png",1],
+	"Deep Water": ["res://Tiles/water_deep.png",1],
+	"Shallow Water": ["res://Tiles/water_shallow.png",1],
 	"Grass": ["res://Tiles/grass.png",1],
-	"Mountain": ["res://Tiles/mountain.png",1],
+	"Stone": ["res://Tiles/stone.png",1],
 	"Snow": ["res://Tiles/snow.png",1],
-	"Tree": ["res://Tiles/tree.png",1],
+	"Wood": ["res://Tiles/wood.png",1],
 	"Leaves": ["res://Tiles/leaves.png",2],
 	"Sand": ["res://Tiles/sand.png",1],
 	"Torch": ["res://Tiles/torch.png",0],
-	"Cave_Floor": ["res://Tiles/cave_ground.png",0]
+	"Dark Stone": ["res://Tiles/dark_stone.png",0]
 }
 
 var Music = {
@@ -104,7 +104,7 @@ var MapData = {
 }
 
 var LightPlacements = {
-	Cave = [],
+	Underground = [],
 	Surface = []
 }
 

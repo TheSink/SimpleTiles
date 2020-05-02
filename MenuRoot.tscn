@@ -13,7 +13,6 @@
 [ext_resource path="res://Textures/UI/grid.png" type="Texture" id=11]
 [ext_resource path="res://Textures/UI/st_logo.png" type="Texture" id=12]
 
-
 [sub_resource type="DynamicFont" id=1]
 size = 18
 use_filter = true

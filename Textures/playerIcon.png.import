@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cave_ground.png-a7362f06883e89051a08b1582ee8fc79.stex"
+path="res://.import/playerIcon.png-4eee43fb5ab9b058cf474abdadf120aa.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Tiles/cave_ground.png"
-dest_files=[ "res://.import/cave_ground.png-a7362f06883e89051a08b1582ee8fc79.stex" ]
+source_file="res://Textures/playerIcon.png"
+dest_files=[ "res://.import/playerIcon.png-4eee43fb5ab9b058cf474abdadf120aa.stex" ]
 
 [params]
 

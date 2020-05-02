@@ -3,13 +3,16 @@
 [ext_resource path="res://Tiles/snow.png" type="Texture" id=1]
 [ext_resource path="res://Tiles/grass.png" type="Texture" id=2]
 [ext_resource path="res://Tiles/water_deep.png" type="Texture" id=3]
-[ext_resource path="res://Tiles/mountain.png" type="Texture" id=4]
+[ext_resource path="res://Tiles/stone.png" type="Texture" id=4]
 [ext_resource path="res://Tiles/water_shallow.png" type="Texture" id=5]
-[ext_resource path="res://Tiles/tree.png" type="Texture" id=6]
+[ext_resource path="res://Tiles/wood.png" type="Texture" id=6]
 [ext_resource path="res://Tiles/leaves.png" type="Texture" id=7]
 [ext_resource path="res://Tiles/sand.png" type="Texture" id=8]
 [ext_resource path="res://Tiles/torch.png" type="Texture" id=9]
-[ext_resource path="res://Tiles/cave_ground.png" type="Texture" id=10]
+[ext_resource path="res://Tiles/dark_stone.png" type="Texture" id=10]
+
+
+
 
 [sub_resource type="OccluderPolygon2D" id=1]
 polygon = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )

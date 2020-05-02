@@ -37,6 +37,7 @@ footstep_volume=100
 Globals="*res://Scripts/Globals.gd"
 Utilities="*res://Scripts/Utilities.gd"
 SaveLoad="*res://Scripts/SaveLoad.gd"
+Definitions="*res://Scripts/autoload/Definitions.gd"
 
 [debug]
 

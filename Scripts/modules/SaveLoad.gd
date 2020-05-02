@@ -41,8 +41,14 @@ func GetSaves():
 
 	return files
 	
-func SaveData(save_name,file_name,mode,input_data):
-	Globals.UIMsg = "Saving map: " + file_name
+func RegisterLightObject(map, location):
+	if map == Definitions.MapLayer.SURFACE:
+		Globals.LightPlacements.Surface.append(location)
+	elif map == Definitions.MapLayer.UNDERGROUND:
+		Globals.LightPlacements.Underground.append(location)
+	
+func SaveData(save_name,file_name,mode,input_data,layer):
+	Globals.UIMsg = "Saving: " + file_name
 	print("[SAVE] Saving "+file_name+".")
 	var save_file = File.new()
 	var progress_increment = 0
@@ -50,7 +56,10 @@ func SaveData(save_name,file_name,mode,input_data):
 	save_file.open("user://saves/"+save_name+"/"+file_name+".dat", File.WRITE)
 	
 	if mode == DATA_MODE.MAP_CELLS: # Save a map in cell-by-cell format
-		var cells = input_data.get_used_cells()
+		
+		save_file.store_var(layer) # Save map layer (surface or underground) for easier reading
+		
+		var cells = input_data.get_used_cells() # Increment over each tile and store data
 		for cell in cells:
 			if int(increment/1024) != progress_increment:
 				yield(get_tree().create_timer(0.001), "timeout")
@@ -69,4 +78,37 @@ func SaveData(save_name,file_name,mode,input_data):
 		save_file.open("user://saves/"+save_name+"/"+file_name+".dat", File.WRITE)
 		save_file.store_var(input_data)
 		
+	save_file.close()
+
+func LoadData(save_name,file_name,mode,output):
+	Globals.UIMsg = "Loading: " + file_name
+	var progress_increment = 0
+	var increment = 0
+	var save_file = File.new()
+	
+	if !save_file.file_exists("user://saves/"+save_name+"/"+file_name+".dat"): #Confirm file exists
+		print("[LOAD] S0 file does not exist.")
+		var _new_scene = get_tree().change_scene("res://MenuRoot.tscn")
+		Globals.DisplayErrorPopup(get_node("/root"), "S0 file does not exist. Load failed.")
+		return
+	save_file.open("user://saves/"+save_name+"/"+file_name+".dat", File.READ)
+	
+	if mode == DATA_MODE.MAP_CELLS:
+		var layer = save_file.get_var()
+		
+		while save_file.get_position() != save_file.get_len(): # Loop over each cell and load data
+			if int(increment/512) != progress_increment:
+				yield(get_tree().create_timer(0.001), "timeout")
+				progress_increment = int(increment/512)
+			increment += 1
+			var tile = Vector2()
+			tile.x = save_file.get_double()
+			tile.y = save_file.get_double()
+			var index = save_file.get_8()
+			output.set_cell(tile.x, tile.y, index)
+			if index == 8:
+				RegisterLightObject(layer, Vector2(tile.x, tile.y)) # Register light coordinates to be spawned by the world manager.
+	elif mode == DATA_MODE.VARIABLE:
+		var data = save_file.get_var(true)
+		return data
 	save_file.close()

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/playerIcon.png-6f37cee220547997dca3f4eabf7b29d5.stex"
+path="res://.import/dark_stone.png-8f81f949acd2627436746ffa956a53f1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://playerIcon.png"
-dest_files=[ "res://.import/playerIcon.png-6f37cee220547997dca3f4eabf7b29d5.stex" ]
+source_file="res://Tiles/dark_stone.png"
+dest_files=[ "res://.import/dark_stone.png-8f81f949acd2627436746ffa956a53f1.stex" ]
 
 [params]
 
