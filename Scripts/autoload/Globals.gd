@@ -1,17 +1,9 @@
 extends Node
 
-enum GameState{MENU,GENERATE,LOAD,INGAME,PAUSED}
-
 var version = "0.1.2"
-var Surface = Node2D.new()
-var Underground = Node2D.new()
-var S0 = TileMap.new()
-var S1 = TileMap.new()
-var S2 = TileMap.new()
-var U0 = TileMap.new()
-var U1 = TileMap.new()
-var U2 = TileMap.new()
-var SelectionMap = TileMap.new()
+onready var CurrentGameState = Definitions.GameState.MENU
+
+
 var Root = Node2D.new()
 var UIMsg = ""
 var UIPercentage = -1
@@ -23,10 +15,28 @@ var MovementEnabled = true
 var NumberErrors = 0
 var TicksElapsed = 0
 var BuildTarget = 0
-var CurrentGameState = GameState.MENU
 var PlayerBody
 
-var BlockTextures = {
+var Maps = { # Global reference to the maps that store the world tiles.
+	Surface = {
+		Root = Node2D.new(),
+		Layers = {
+			S0 = TileMap.new(),
+			S1 = TileMap.new(),
+			S2 = TileMap.new()
+		}
+	},
+	Underground = {
+		Root = Node2D.new(),
+		Layers = {
+			U0 = TileMap.new(),
+			U1 = TileMap.new(),
+			U2 = TileMap.new()
+		}
+	}
+}
+
+var BlockTextures = { # Dictionary of the tiles that can be placed/broken, soon to be replaced with the Database singleton.
 	"Deep Water": ["res://Tiles/water_deep.png",1],
 	"Shallow Water": ["res://Tiles/water_shallow.png",1],
 	"Grass": ["res://Tiles/grass.png",1],
@@ -39,7 +49,7 @@ var BlockTextures = {
 	"Dark Stone": ["res://Tiles/dark_stone.png",0]
 }
 
-var Music = {
+var Music = { # Game music, including: path, layer to play on, and length
 	"nautilus": ["res://Music/nautilus.ogg", 1, 217],
 	"osare": ["res://Music/osare.ogg", 1, 307],
 	"perces": ["res://Music/perces.ogg", 1, 140],
@@ -48,21 +58,28 @@ var Music = {
 	"wonderlust": ["res://Music/wonderlust.ogg", 0, 147]
 }
 
-var LightReferences = {
+var LightReferences = { # A reference to the actual light nodes.
 	Cave = [],
 	Surface = []
 }
 
-var Player = {
+var LightPlacements = { # A list of light position coordinates, either for tracking or reloading when a map is loaded.
+	Underground = [],
+	Surface = []
+}
+
+var Player = { # Player metadata
+	Health = 100,
 	Position = Vector2(-1,-1),
 	Map = 1,
+	EXP = 0,
 	Equipped = [-1,0], # Block ID, Amount
 	Stored = {
 		
 	}
 }
 
-var SaveMetadata = {
+var SaveMetadata = { # Save file metadata
 	Name = "",
 	Description = "",
 	Size = "",
@@ -70,11 +87,11 @@ var SaveMetadata = {
 	Version = ""
 }
 
-var BlockChecks = {
-	TreeLeaves = []
+var BlockChecks = { # Array of blocks to be checked during tick
+	TreeLeaves = [] # For tree leaf decay
 }
 
-var MapData = {
+var MapData = { # Generator configuration, will not be needed once WorldGeneration module is finished.
 	Size = 256,
 	TickSpeed = 3,
 	Octaves = 4,
@@ -103,15 +120,10 @@ var MapData = {
 	}
 }
 
-var LightPlacements = {
-	Underground = [],
-	Surface = []
-}
-
 func _lower_errors():
 	NumberErrors -= 1
 
-func DisplayErrorPopup(root, errorMsg): # Rewrite and move to UIActions module
+func DisplayErrorPopup(root, errorMsg): # Rewrite and move to UIActions module is needed
 	if NumberErrors < 1:
 		NumberErrors += 1
 		var gameState = str(CurrentGameState)

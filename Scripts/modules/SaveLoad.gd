@@ -126,13 +126,13 @@ func LoadData(save_name,file_name,mode,output=null):
 func SaveGame(save_name):
 	CreateSaveFolder(save_name)
 	# Save all surface maps to file
-	SaveData(save_name,"S0",DATA_MODE.MAP_CELLS,Globals.S0,Definitions.MapLayer.SURFACE)
-	SaveData(save_name,"S1",DATA_MODE.MAP_CELLS,Globals.S1,Definitions.MapLayer.SURFACE)
-	SaveData(save_name,"S2",DATA_MODE.MAP_CELLS,Globals.S2,Definitions.MapLayer.SURFACE)
+	SaveData(save_name,"S0",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.S0,Definitions.MapLayer.SURFACE)
+	SaveData(save_name,"S1",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.S1,Definitions.MapLayer.SURFACE)
+	SaveData(save_name,"S2",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.S2,Definitions.MapLayer.SURFACE)
 	# Save all underground maps to file
-	SaveData(save_name,"U0",DATA_MODE.MAP_CELLS,Globals.U0,Definitions.MapLayer.UNDERGROUND)
-	SaveData(save_name,"U1",DATA_MODE.MAP_CELLS,Globals.U1,Definitions.MapLayer.UNDERGROUND)
-	SaveData(save_name,"U2",DATA_MODE.MAP_CELLS,Globals.U2,Definitions.MapLayer.UNDERGROUND)
+	SaveData(save_name,"U0",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.U0,Definitions.MapLayer.UNDERGROUND)
+	SaveData(save_name,"U1",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.U1,Definitions.MapLayer.UNDERGROUND)
+	SaveData(save_name,"U2",DATA_MODE.MAP_CELLS,Globals.Maps.Surface.Layers.U2,Definitions.MapLayer.UNDERGROUND)
 	# Save metadata/player information
 	SaveData(save_name,"PlayerData",DATA_MODE.VARIABLE,Globals.Player)
 	SaveData(save_name,"Metadata",DATA_MODE.VARIABLE,[Globals.SaveMetadata,Globals.MapData])
@@ -142,13 +142,13 @@ func SaveGame(save_name):
 
 func LoadGame(save_name):
 	# Load all surface maps
-	LoadData(save_name, "S0", DATA_MODE.MAP_CELLS, Globals.S0)
-	LoadData(save_name, "S1", DATA_MODE.MAP_CELLS, Globals.S1)
-	LoadData(save_name, "S2", DATA_MODE.MAP_CELLS, Globals.S2)
+	LoadData(save_name, "S0", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.S0)
+	LoadData(save_name, "S1", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.S1)
+	LoadData(save_name, "S2", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.S2)
 	# Load all underground maps
-	LoadData(save_name, "U0", DATA_MODE.MAP_CELLS, Globals.U0)
-	LoadData(save_name, "U1", DATA_MODE.MAP_CELLS, Globals.U1)
-	LoadData(save_name, "U2", DATA_MODE.MAP_CELLS, Globals.U2)
+	LoadData(save_name, "U0", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.U0)
+	LoadData(save_name, "U1", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.U1)
+	LoadData(save_name, "U2", DATA_MODE.MAP_CELLS, Globals.Maps.Surface.Layers.U2)
 	# Load metadata/player information
 	var player_data = LoadData(save_name, "PlayerData", DATA_MODE.VARIABLE)
 	var metadata = LoadData(save_name, "Metadata", DATA_MODE.VARIABLE)

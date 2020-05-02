@@ -35,7 +35,7 @@ footstep_volume=100
 [autoload]
 
 Globals="*res://Scripts/autoload/Globals.gd"
-Utilities="*res://Scripts/Utilities.gd"
+Utilities="*res://Scripts/autoload/Utilities.gd"
 Definitions="*res://Scripts/autoload/Definitions.gd"
 SaveLoad="*res://Scripts/modules/SaveLoad.gd"
 ObjectSpawner="*res://Scripts/modules/ObjectSpawner.gd"

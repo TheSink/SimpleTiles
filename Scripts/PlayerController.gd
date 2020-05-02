@@ -4,7 +4,7 @@ extends KinematicBody2D
 const BASE_SPEED = 175
 var speed = 175
 var selected_block = 2
-var targetMap = Globals.S0
+var targetMap = Globals.Maps.Surface.Layers.S0
 var saved_msg = ""
 var GroundLayerForCollision = false
 var isSprinting = false
@@ -72,9 +72,9 @@ func _build():
 	if get_global_mouse_position().distance_to(global_position) < 160:
 		var buildTargetMap
 		if Globals.CurrentLayer == 0:
-			buildTargetMap = Globals.Underground.get_node("U"+str(Globals.BuildTarget))
+			buildTargetMap = Globals.Maps.Underground.Root.get_node("U"+str(Globals.BuildTarget))
 		elif Globals.CurrentLayer == 1:
-			buildTargetMap = Globals.Surface.get_node("S"+str(Globals.BuildTarget))
+			buildTargetMap = Globals.Maps.Surface.Root.get_node("S"+str(Globals.BuildTarget))
 		print(buildTargetMap.name)
 		var old_tile = buildTargetMap.get_cellv(buildTargetMap.world_to_map(get_global_mouse_position()))
 		buildTargetMap.set_cellv(buildTargetMap.world_to_map(get_global_mouse_position()), selected_block)
@@ -98,12 +98,12 @@ func _build():
 		if old_tile == 8 and not selected_block == 8:
 			if Globals.CurrentLayer == 0:
 				for light in Globals.LightReferences.Cave:
-					if Globals.S0.world_to_map(light.global_position) == Globals.S0.world_to_map(get_global_mouse_position()):
+					if Globals.Maps.Surface.Layers.S0.world_to_map(light.global_position) == Globals.Maps.Surface.Layers.S0.world_to_map(get_global_mouse_position()):
 						Globals.LightReferences.Cave.erase(light)
 						light.queue_free()
 			else:
 				for light in Globals.LightReferences.Surface:
-					if Globals.S0.world_to_map(light.global_position) == Globals.S0.world_to_map(get_global_mouse_position()):
+					if Globals.Maps.Surface.Layers.S0.world_to_map(light.global_position) == Globals.Maps.Surface.Layers.S0.world_to_map(get_global_mouse_position()):
 						Globals.LightReferences.Surface.erase(light)
 						light.queue_free()
 
@@ -217,19 +217,19 @@ func _physics_process(delta):
 	if Input.is_action_pressed("build"):
 		_build()
 	if Input.is_action_just_pressed("SwitchLayers") or ManualLayerSwitch == true:
-		if Globals.CurrentGameState == Globals.GameState.INGAME:
+		if Globals.CurrentGameState == Definitions.GameState.INGAME:
 			ManualLayerSwitch = false
-#			Globals.S0.visible = not Globals.S0.visible
-#			Globals.S2.visible = not Globals.S2.visible
-#			Globals.U0.visible = not Globals.U0.visible
+#			Globals.Maps.Surface.Layers.S0.visible = not Globals.Maps.Surface.Layers.S0.visible
+#			Globals.Maps.Surface.Layers.S2.visible = not Globals.Maps.Surface.Layers.S2.visible
+#			Globals.Maps.Surface.Layers.U0.visible = not Globals.Maps.Surface.Layers.U0.visible
 			$Light2D.enabled = not $Light2D.enabled
 			for light in Globals.LightReferences.values()[Globals.CurrentLayer]:
 				light.enabled = false
 			if Globals.CurrentLayer == 0:
 				Globals.CurrentLayer = 1
-				Globals.Surface.position -= Vector2(100000,0)
-				Globals.Underground.position += Vector2(100000,0)
-				targetMap = Globals.S0
+				Globals.Maps.Surface.Root.position -= Vector2(100000,0)
+				Globals.Maps.Underground.Root.position += Vector2(100000,0)
+				targetMap = Globals.Maps.Surface.Layers.S0
 				if Globals.MapData.Flags.day_night == true:
 					if $LightMask.enabled == false:
 						$LightMask.enabled = true
@@ -238,9 +238,9 @@ func _physics_process(delta):
 					$LightMask.enabled = false
 			else:
 				Globals.CurrentLayer = 0
-				targetMap = Globals.U0
-				Globals.Surface.position += Vector2(100000,0)
-				Globals.Underground.position -= Vector2(100000,0)
+				targetMap = Globals.Maps.Surface.Layers.U0
+				Globals.Maps.Surface.Root.position += Vector2(100000,0)
+				Globals.Maps.Underground.Root.position -= Vector2(100000,0)
 				if $LightMask.enabled == false:
 					$LightMask.enabled = true
 				$LightMask.energy = 1
@@ -264,10 +264,10 @@ func _physics_process(delta):
 		$Camera2D/UILayer/UIContainer/Message/ProgressBar.visible = false
 
 func music():
-	while Globals.CurrentGameState == Globals.GameState.INGAME:
+	while Globals.CurrentGameState == Definitions.GameState.INGAME:
 		randomize()
 		var Required = 0
-		if targetMap == Globals.S0:
+		if targetMap == Globals.Maps.Surface.Layers.S0:
 			Required = 1
 		var selectedSong = round(rand_range(0,5))
 		while selectedSong == lastSong or Globals.Music.values()[selectedSong][1] != Required:
@@ -281,12 +281,12 @@ func music():
 func _ready():
 	$Camera2D/UILayer/UIContainer/LoadCover.visible = true
 	$Camera2D/UILayer/UIContainer/LoadCover.modulate = Color(1,1,1,1)
-	targetMap = Globals.S0
+	targetMap = Globals.Maps.Surface.Layers.S0
 	Globals.PlayerBody = self
-	while Globals.CurrentGameState != Globals.GameState.INGAME:
+	while Globals.CurrentGameState != Definitions.GameState.INGAME:
 		yield(get_tree().create_timer(2), "timeout")
 	yield(get_tree().create_timer(0.5), "timeout")
-	targetMap = Globals.S0
+	targetMap = Globals.Maps.Surface.Layers.S0
 	if Globals.Player.Map == 0:
 		ManualLayerSwitch = true
 	var equipped = Globals.Player.Equipped[0]
@@ -363,8 +363,8 @@ func _on_Exit_pressed():
 	Globals.LightReferences.Cave = []
 	Globals.LightPlacements.Surface = []
 	Globals.LightPlacements.Cave = []
-	Globals.S0.position = Vector2(0,0)
-	Globals.U0.position = Vector2(0,0)
+	Globals.Maps.Surface.Layers.S0.position = Vector2(0,0)
+	Globals.Maps.Surface.Layers.U0.position = Vector2(0,0)
 	var _new_scene = get_tree().change_scene("res://MenuRoot.tscn")
 
 

@@ -27,10 +27,10 @@ func _on_Timer_timeout():
 	var treeArray = Globals.BlockChecks.TreeLeaves
 	if treeArray.size() > 0:
 		for tree in treeArray:
-			var checkForLeaves = check_all_near(Globals.S2, tree, 6)
+			var checkForLeaves = check_all_near(Globals.Maps.Surface.Layers.S2, tree, 6)
 			if checkForLeaves.size() > 0:
 				var tileToRemove = checkForLeaves[rand_range(0,checkForLeaves.size())]
-				if check_all_near(Globals.S0, tileToRemove, 5).size() < 1:
-					Globals.S2.set_cellv(tileToRemove,-1)
+				if check_all_near(Globals.Maps.Surface.Layers.S0, tileToRemove, 5).size() < 1:
+					Globals.Maps.Surface.Layers.S2.set_cellv(tileToRemove,-1)
 			else:
 				Globals.BlockChecks.TreeLeaves.erase(tree)

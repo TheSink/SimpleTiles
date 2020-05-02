@@ -198,15 +198,15 @@ func _generate_world(): # ------------------------ Start of World Generation
 	$Surface/S0.fix_invalid_tiles()
 	$Underground/U0.update_bitmask_region()
 	$Underground/U0.fix_invalid_tiles()
-	Globals.Surface = $Surface
-	Globals.S0 = $Surface/S0
-	Globals.S2 = $Surface/S2
-	Globals.U0 = $Underground/U0 # ----------------- End of World Generation
+	Globals.Maps.Surface.Root = $Surface
+	Globals.Maps.Surface.Layers.S0 = $Surface/S0
+	Globals.Maps.Surface.Layers.S2 = $Surface/S2
+	Globals.Maps.Surface.Layers.U0 = $Underground/U0 # ----------------- End of World Generation
 	
 	Globals.UIMsg = ""
 	Globals.UIPercentage = -1
 	Globals.MovementEnabled = true
-	Globals.CurrentGameState = Globals.GameState.INGAME
+	Globals.CurrentGameState = Definitions.GameState.INGAME
 
 func relayer():
 	if SavedTargetLayer == 0:
@@ -235,15 +235,14 @@ func _physics_process(_delta):
 		
 func _ready():
 	Globals.Root = get_node("../")
-	Globals.S0 = $Surface/S0
-	Globals.S1 = $Surface/S1
-	Globals.S2 = $Surface/S2
-	Globals.U0 = $Underground/U0
-	Globals.U1 = $Underground/U1
-	Globals.U2 = $Underground/U2
-	Globals.SelectionMap = $SelectionMap
-	Globals.Surface = $Surface
-	Globals.Underground = $Underground
+	Globals.Maps.Surface.Layers.S0 = $Surface/S0
+	Globals.Maps.Surface.Layers.S1 = $Surface/S1
+	Globals.Maps.Surface.Layers.S2 = $Surface/S2
+	Globals.Maps.Surface.Layers.U0 = $Underground/U0
+	Globals.Maps.Surface.Layers.U1 = $Underground/U1
+	Globals.Maps.Surface.Layers.U2 = $Underground/U2
+	Globals.Maps.Surface.Root = $Surface
+	Globals.Maps.Underground.Root = $Underground
 	Globals.Time = 0
 	$TickHandler.wait_time = Globals.MapData.TickSpeed
 	
@@ -259,17 +258,17 @@ func _ready():
 	
 	scanForButtons(self)
 	
-	if Globals.CurrentGameState == Globals.GameState.GENERATE:
+	if Globals.CurrentGameState == Definitions.GameState.GENERATE:
 		newMap()
 		
-	while Globals.CurrentGameState != Globals.GameState.INGAME:
+	while Globals.CurrentGameState != Definitions.GameState.INGAME:
 		yield(get_tree().create_timer(0.1), "timeout")
 	
 	for surface_light in Globals.LightPlacements.Surface:
 		var light = Light2D.new()
 		add_child(light)
 		light.texture = load("res://torchlight.png")
-		light.global_position = Globals.S0.map_to_world(surface_light)+Vector2(16,16)
+		light.global_position = Globals.Maps.Surface.Layers.S0.map_to_world(surface_light)+Vector2(16,16)
 		light.color = Color.orange
 		light.energy = 1
 		light.texture_scale = 1.5
@@ -280,7 +279,7 @@ func _ready():
 		var light = Light2D.new()
 		add_child(light)
 		light.texture = load("res://torchlight.png")
-		light.global_position = Globals.S0.map_to_world(cave_light)+Vector2(16,16)
+		light.global_position = Globals.Maps.Surface.Layers.S0.map_to_world(cave_light)+Vector2(16,16)
 		light.color = Color.orange
 		light.energy = 1
 		light.texture_scale = 1.5

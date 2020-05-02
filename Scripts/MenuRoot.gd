@@ -19,23 +19,6 @@ var settingsNode
 var tickSpeed
 var settingsOpen = false
 
-func _create_range(obj_tree, root, property_name, value, minimum, maximum, increment, enabled=true):
-	var property = obj_tree.create_item(root)
-	property.set_cell_mode(1,TreeItem.CELL_MODE_RANGE)
-	property.set_text(0,property_name)
-	property.set_range_config(1, minimum, maximum, increment)
-	property.set_range(1,value)
-	property.set_editable(1,enabled)
-	return property
-
-func _create_bool(obj_tree, root, property_name, checked, enabled=true):
-	var property = obj_tree.create_item(root)
-	property.set_cell_mode(1,TreeItem.CELL_MODE_CHECK)
-	property.set_text(0,property_name)
-	property.set_checked(1,checked)
-	property.set_editable(1,enabled)
-	return property
-
 func buttonSound():
 	$Click.play()
 
@@ -52,29 +35,29 @@ func _ready():
 	var root = tree.create_item()
 	root.set_text(0,"World Settings")
 	randomize()
-	genSeed = _create_range(tree, root, "Seed", rand_range(0,99999999), 0, 99999999, 1)
-	tickSpeed = _create_range(tree,root,"Tick Speed",ProjectSettings.get_setting("game/settings/tick/speed"), 0.5, 16, 0.5)
+	genSeed = Utilities.create_tree_range(tree, root, "Seed", rand_range(0,99999999), 0, 99999999, 1)
+	tickSpeed = Utilities.create_tree_range(tree,root,"Tick Speed",ProjectSettings.get_setting("game/settings/tick/speed"), 0.5, 16, 0.5)
 	var surfaceflags = tree.create_item(root)
 	surfaceflags.set_text(0, "Flags")
-	doTrees = _create_bool(tree, surfaceflags, "Generate Trees", true)
-	doFoliage = _create_bool(tree, surfaceflags, "Generate Foliage (Disabled)", false,false)
-	var _doCaveOres = _create_bool(tree, surfaceflags, "Generate Cave Ores (Disabled)", false,false)
-	doCycle = _create_bool(tree, surfaceflags, "Enable Day/Night Cycle", true)
-	var _doAnimals = _create_bool(tree, surfaceflags, "Spawn Animals (Disabled)", false,false)
-	var _doEnemies = _create_bool(tree, surfaceflags, "Spawn Enemies (Disabled)", false,false)
+	doTrees = Utilities.create_tree_bool(tree, surfaceflags, "Generate Trees", true)
+	doFoliage = Utilities.create_tree_bool(tree, surfaceflags, "Generate Foliage (Disabled)", false,false)
+	var _doCaveOres = Utilities.create_tree_bool(tree, surfaceflags, "Generate Cave Ores (Disabled)", false,false)
+	doCycle = Utilities.create_tree_bool(tree, surfaceflags, "Enable Day/Night Cycle", true)
+	var _doAnimals = Utilities.create_tree_bool(tree, surfaceflags, "Spawn Animals (Disabled)", false,false)
+	var _doEnemies = Utilities.create_tree_bool(tree, surfaceflags, "Spawn Enemies (Disabled)", false,false)
 	var surfacegen = tree.create_item(root)
 	surfacegen.set_text(0,"Generator (Advanced)")
-	octaves = _create_range(tree, surfacegen, "Octaves", 4, 1, 9, 1)
-	period = _create_range(tree, surfacegen, "Period", rand_range(38,44), 10, 400, 1)
-	lacunarity = _create_range(tree, surfacegen, "Lacunarity", 2, 0.1, 5, 0.1)
-	persistence = _create_range(tree, surfacegen, "Persistence", 0.5, 0, 1, 0.01)
+	octaves = Utilities.create_tree_range(tree, surfacegen, "Octaves", 4, 1, 9, 1)
+	period = Utilities.create_tree_range(tree, surfacegen, "Period", rand_range(38,44), 10, 400, 1)
+	lacunarity = Utilities.create_tree_range(tree, surfacegen, "Lacunarity", 2, 0.1, 5, 0.1)
+	persistence = Utilities.create_tree_range(tree, surfacegen, "Persistence", 0.5, 0, 1, 0.01)
 	var surfacetol = tree.create_item(root)
 	surfacetol.set_text(0,"Tolerances (Advanced)")
-	dwt = _create_range(tree, surfacetol, "Deep Water", rand_range(0.04,0.07), 0.01, 0.99, 0.01)
-	swt = _create_range(tree, surfacetol, "Shallow Water", rand_range(0.2,0.26), 0.01, 0.99, 0.01)
-	gt = _create_range(tree, surfacetol, "Grass", rand_range(0.48,0.57), 0.01, 0.99, 0.01)
-	mt = _create_range(tree, surfacetol, "Mountain", rand_range(0.66,0.7), 0.01, 0.99, 0.01)
-	st = _create_range(tree, surfacetol, "Snow", rand_range(0.86,0.91), 0.01, 0.99, 0.01)
+	dwt = Utilities.create_tree_range(tree, surfacetol, "Deep Water", rand_range(0.04,0.07), 0.01, 0.99, 0.01)
+	swt = Utilities.create_tree_range(tree, surfacetol, "Shallow Water", rand_range(0.2,0.26), 0.01, 0.99, 0.01)
+	gt = Utilities.create_tree_range(tree, surfacetol, "Grass", rand_range(0.48,0.57), 0.01, 0.99, 0.01)
+	mt = Utilities.create_tree_range(tree, surfacetol, "Mountain", rand_range(0.66,0.7), 0.01, 0.99, 0.01)
+	st = Utilities.create_tree_range(tree, surfacetol, "Snow", rand_range(0.86,0.91), 0.01, 0.99, 0.01)
 	$MainMenu/VersionText.text = "Version " + ProjectSettings.get("application/config/version")
 	
 	print("Game version is " + ProjectSettings.get("application/config/version"))
@@ -85,13 +68,7 @@ func _ready():
 	AudioServer.set_bus_volume_db(2, -80-((ProjectSettings.get_setting("audio/footstep_volume")/100)*-80))
 	print("Successfully loaded audio bus volume configuration.")
 	
-	scanForButtons(self)
-
-func scanForButtons(path):
-	for node in path.get_children():
-		if (node.get_class() == "Button"):
-			node.connect("pressed", self, "buttonSound")
-		scanForButtons(node)
+	Utilities.add_click_sounds(self)
 
 func _on_Button2_pressed(): # Quit Button
 	get_tree().quit()
@@ -119,7 +96,7 @@ func _on_Size_value_changed(value):
 
 
 func _on_Create_pressed(): # Create World Button
-	Globals.CurrentGameState = Globals.GameState.GENERATE
+	Globals.CurrentGameState = Definitions.GameState.GENERATE
 	Globals.MapData.Size = $"WorldSelect/TabContainer/Create New World/Size".value
 	Globals.MapData.TickSpeed = tickSpeed.get_range(1)
 	Globals.MapData.Octaves = octaves.get_range(1)
@@ -135,7 +112,7 @@ func _on_Create_pressed(): # Create World Button
 	Globals.MapData.Flags.trees = doTrees.is_checked(1)
 	Globals.MapData.Flags.foliage = doFoliage.is_checked(1)
 	Globals.MapData.Flags.day_night = doCycle.is_checked(1)
-	Globals.CurrentGameState = Globals.GameState.GENERATE
+	Globals.CurrentGameState = Definitions.GameState.GENERATE
 	var saveName = $"WorldSelect/TabContainer/Create New World/Name".text
 	Globals.SaveMetadata.Name = saveName.replace(" ", "_")
 	Globals.SaveMetadata.Description = $"WorldSelect/TabContainer/Create New World/Description".text
@@ -163,7 +140,7 @@ func _on_ItemList_item_selected(index):
 func _on_PlayButton_pressed():
 	print("Loading world:" + selectedLevel)
 	var _new_scene = get_tree().change_scene("res://World.tscn")
-	Globals.CurrentGameState = Globals.GameState.LOAD
+	Globals.CurrentGameState = Definitions.GameState.LOAD
 	SaveLoad.LoadGame(selectedLevel)
 
 func _on_Button5_pressed():
