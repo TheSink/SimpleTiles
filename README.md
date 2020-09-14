@@ -1,5 +1,10 @@
 # SimpleTiles
 
-More info will be here soon about SimpleTiles itself. Itch.io page: https://thesinkgod.itch.io/simpletiles
+This used to be a project to create a 2D exploration game in a similar vein to Minecraft, but ended up being abandoned after a few weeks.
+This can be used as an example but I don't suggest anyone use it in a production/professional environment as it's kinda awful.
+- No chunks, entire world is loaded at once
+- Very messy code
+- No efforts to optimize loading and saving process
+- Just generally bad
 
-This repository has been uploaded as I am now interested in making SimpleTiles open source. It's also a great time to do such a thing since I'm about to refactor a good portion of the game's code because it's currently a huge mess. Modularization and readability is one of the big objectives here.
+so there you go
